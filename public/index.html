@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <span class="logo-name">Pulse</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="theme-toggle" title="Alternar tema" aria-label="Alternar tema">
+          <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+        </button>
+        <button class="icon-btn sidebar-close-btn" id="sidebar-close" aria-label="Fechar menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-search">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar salas..." autocomplete="off">
+      </div>
+    </div>
+
+    <div class="rooms-label">Salas</div>
+    <div class="rooms-list" id="rooms-list"></div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="my-avatar" style="background:var(--accent-soft);color:var(--accent-text)">
+        <span id="my-initials">?</span>
+        <div class="online-dot"></div>
+      </div>
+      <div class="user-info">
+        <div class="user-name" id="my-name-display">—</div>
+        <div class="user-status">● online</div>
+      </div>
+      <button class="icon-btn" id="logout-btn" title="Sair" aria-label="Sair">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16,17 21,12 16,7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- OVERLAY mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- CHAT -->
+  <main class="chat-area">
+    <header class="chat-header">
+      <div class="chat-header-left">
+        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Abrir menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="chat-room-icon">💬</div>
+        <div>
+          <div class="chat-room-name" id="chat-room-name">Selecione uma sala</div>
+          <div class="chat-room-meta" id="chat-room-meta">—</div>
+        </div>
+      </div>
+      <div class="chat-header-right">
+        <div class="online-pill">
+          <div class="online-pip"></div>
+          <span id="online-count">0 online</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="messages-wrap" id="messages-wrap">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="empty-title">Nenhuma sala selecionada</div>
+        <div class="empty-sub">Escolha uma sala na barra lateral para começar</div>
+      </div>
+      <div class="typing-row" id="typing-row">
+        <div class="msg-avatar" id="typing-avatar" style="background:var(--accent-soft);color:var(--accent-text)">?</div>
+        <div>
+          <div class="typing-bubble">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+          <span class="typing-label" id="typing-label">alguém está digitando</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area" style="position:relative">
+      <!-- EMOJI PICKER -->
+      <div class="emoji-picker" id="emoji-picker">
+        <div class="emoji-tabs" id="emoji-tabs"></div>
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+
+      <div class="input-wrap">
+        <button class="icon-btn" id="emoji-toggle-btn" aria-label="Emoji" style="margin-bottom:2px;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </button>
+        <textarea class="message-input" id="message-input" placeholder="Mensagem…" rows="1" maxlength="500" aria-label="Campo de mensagem" disabled></textarea>
+        <div class="input-actions">
+          <button class="send-btn" id="send-btn" disabled aria-label="Enviar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="input-hint">
+        <span class="hint-left" id="hint-text">Selecione uma sala para começar</span>
+        <span class="char-count" id="char-count"></span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-card">
+    <div>
+      <div class="login-logo">
+        <div class="login-logo-dot"></div>
+        <span style="font-size:15px;font-weight:500">Pulse Chat</span>
+      </div>
+      <div class="login-title">Olá 👋</div>
+      <div class="login-subtitle" style="margin-top:4px">Como quer ser chamado?</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <input type="text" class="login-input" id="login-name" placeholder="Seu nickname..." autocomplete="off" maxlength="24">
+      <button class="login-btn" id="login-btn">Entrar →</button>
+    </div>
+    <div class="login-footer">Projeto de demonstração · Socket.io + Node.js</div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// ── Estado ─────────────────────────────────────────────────────────
+let currentUser = null;
+let currentRoom = null;
+let socket      = null;
+
+// ── Salas ──────────────────────────────────────────────────────────
+const ROOMS = [
+  { id: 'geral',  name: 'geral',  desc: 'Conversa geral'  },
+  { id: 'dev',    name: 'dev',    desc: 'Desenvolvimento' },
+  { id: 'design', name: 'design', desc: 'UI/UX e design'  },
+  { id: 'random', name: 'random', desc: 'Aleatório'       },
+];
+
+// ── Cores por usuário ──────────────────────────────────────────────
+const CL = [
+  {bg:'#EEEDFE',text:'#3C3489'},{bg:'#E1F5EE',text:'#0F6E56'},
+  {bg:'#FAECE7',text:'#993C1D'},{bg:'#FBEAF0',text:'#993556'},
+  {bg:'#E6F1FB',text:'#185FA5'},{bg:'#EAF3DE',text:'#3B6D11'},
+  {bg:'#FAEEDA',text:'#854F0B'},
+];
+const CD = [
+  {bg:'#26215C',text:'#AFA9EC'},{bg:'#04342C',text:'#5DCAA5'},
+  {bg:'#4A1B0C',text:'#F0997B'},{bg:'#4B1528',text:'#ED93B1'},
+  {bg:'#042C53',text:'#85B7EB'},{bg:'#173404',text:'#97C459'},
+  {bg:'#412402',text:'#EF9F27'},
+];
+
+function colorFor(name) {
+  const i = name.split('').reduce((a,c)=>a+c.charCodeAt(0),0) % CL.length;
+  return isDark() ? CD[i] : CL[i];
+}
+function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark'; }
+function initials(n){ return n.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?'; }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeStr(iso){ const d=iso?new Date(iso):new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
+function dateStr(){ return new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); }
+
+// ── Toast ──────────────────────────────────────────────────────────
+function showToast(msg) {
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className='toast'; t.textContent=msg; c.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),300);},2800);
+}
+
+// ── Mensagens ──────────────────────────────────────────────────────
+function scrollToBottom(){
+  const w=document.getElementById('messages-wrap');
+  w.scrollTo({top:w.scrollHeight,behavior:'smooth'});
+}
+
+function clearMessages(){
+  const wrap=document.getElementById('messages-wrap');
+  Array.from(wrap.children).forEach(el=>{
+    if(el.id!=='typing-row'&&el.id!=='empty-state') el.remove();
+  });
+}
+
+function appendMessage({id,user,text,time,own,read}){
+  const wrap=document.getElementById('messages-wrap');
+  const ti=document.getElementById('typing-row');
+  const col=colorFor(user);
+  const row=document.createElement('div');
+  row.className='msg-row'+(own?' own':'');
+  if(id) row.dataset.id=id;
+  const av=`<div class="msg-avatar" style="background:${col.bg};color:${col.text}">${initials(user)}</div>`;
+  const chk=own?`<span class="msg-read">${read?'✓✓':'✓'}</span>`:'';
+  row.innerHTML=`
+    ${own?'':av}
+    <div class="msg-content">
+      ${own?'':` <div class="msg-sender">${escHtml(user)}</div>`}
+      <div class="bubble">${escHtml(text)}</div>
+      <div class="msg-meta"><span class="msg-time">${time}</span>${chk}</div>
+    </div>
+    ${own?av:''}
+  `;
+  wrap.insertBefore(row,ti);
+  scrollToBottom();
+}
+
+function appendSystemEvent(text){
+  const wrap=document.getElementById('messages-wrap');
+  const ti=document.getElementById('typing-row');
+  const el=document.createElement('div');
+  el.className='sys-event';
+  el.innerHTML=`<div class="sys-dot"></div><span>${escHtml(text)}</span><div class="sys-dot"></div>`;
+  wrap.insertBefore(el,ti);
+}
+
+function showTyping(name){
+  const col=colorFor(name);
+  const av=document.getElementById('typing-avatar');
+  av.textContent=initials(name); av.style.background=col.bg; av.style.color=col.text;
+  document.getElementById('typing-label').textContent=name+' está digitando';
+  document.getElementById('typing-row').classList.add('visible');
+  scrollToBottom();
+}
+function hideTyping(){ document.getElementById('typing-row').classList.remove('visible'); }
+function updateOnlineCount(n){ document.getElementById('online-count').textContent=n+' online'; }
+
+// ── Socket ─────────────────────────────────────────────────────────
+function connectSocket(){
+  socket=io();
+
+  socket.on('message_history',(messages)=>{
+    clearMessages();
+    const wrap=document.getElementById('messages-wrap');
+    const ti=document.getElementById('typing-row');
+    const div=document.createElement('div');
+    div.className='date-divider';
+    div.innerHTML=`<span>hoje — ${dateStr()}</span>`;
+    wrap.insertBefore(div,ti);
+    appendSystemEvent('Você entrou na sala');
+    messages.forEach(msg=>appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:true}));
+    scrollToBottom();
+  });
+
+  socket.on('new_message',(msg)=>{
+    appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:msg.user!==currentUser});
+    if(msg.user===currentUser){
+      setTimeout(()=>{ const el=document.querySelector(`[data-id="${msg.id}"] .msg-read`); if(el) el.textContent='✓✓'; },800);
+    }
+    const preview=document.querySelector(`.room-item[data-room="${currentRoom}"] .room-preview`);
+    if(preview) preview.textContent=(msg.user===currentUser?'Você':msg.user)+': '+msg.text;
+  });
+
+  socket.on('user_joined',({user,online})=>{ if(user!==currentUser) appendSystemEvent(user+' entrou na sala'); updateOnlineCount(online); });
+  socket.on('user_left',  ({user,online})=>{ appendSystemEvent(user+' saiu'); updateOnlineCount(online); });
+  socket.on('user_typing',      ({user})=>showTyping(user));
+  socket.on('user_stop_typing', ()      =>hideTyping());
+  socket.on('rate_limit',({message})=>showToast(message));
+  socket.on('disconnect',()=>showToast('Conexão perdida. Reconectando...'));
+  socket.on('connect',()=>{ if(currentRoom&&currentUser){ socket.emit('join_room',{room:currentRoom,user:currentUser}); showToast('Reconectado ✓'); } });
+}
+
+// ── Sidebar mobile ─────────────────────────────────────────────────
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+document.getElementById('menu-btn').addEventListener('click', openSidebar);
+document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
+document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+
+// ── Salas ──────────────────────────────────────────────────────────
+function renderRooms(filter){
+  const list=document.getElementById('rooms-list');
+  list.innerHTML='';
+  const q=(filter||'').toLowerCase();
+  ROOMS.filter(r=>r.name.includes(q)).forEach(r=>{
+    const el=document.createElement('div');
+    el.className='room-item'; el.dataset.room=r.id;
+    el.innerHTML=`
+      <div class="room-icon-wrap"><span class="room-hash">#</span></div>
+      <div class="room-info">
+        <div class="room-name">${r.name}</div>
+        <div class="room-preview">${r.desc}</div>
+      </div>
+    `;
+    el.onclick=()=>{ joinRoom(r.id,r.name,r.desc); closeSidebar(); };
+    list.appendChild(el);
+  });
+}
+
+function joinRoom(id,name,desc){
+  currentRoom=id;
+  document.getElementById('chat-room-name').textContent='#'+name;
+  document.getElementById('chat-room-meta').textContent=desc;
+  document.getElementById('message-input').disabled=false;
+  document.getElementById('send-btn').disabled=true;
+  document.getElementById('hint-text').textContent='Enter para enviar · Shift+Enter para nova linha';
+  document.getElementById('empty-state').style.display='none';
+  document.querySelectorAll('.room-item').forEach(el=>el.classList.remove('active'));
+  document.querySelector(`.room-item[data-room="${id}"]`)?.classList.add('active');
+  if(socket) socket.emit('join_room',{room:id,user:currentUser});
+}
+
+// ── Enviar mensagem ────────────────────────────────────────────────
+let typingDebounce;
+
+function sendMessage(){
+  const input=document.getElementById('message-input');
+  const text=input.value.trim();
+  if(!text||!currentRoom||!socket) return;
+  socket.emit('send_message',{text});
+  input.value=''; input.style.height='';
+  document.getElementById('send-btn').disabled=true;
+  document.getElementById('char-count').textContent='';
+  clearTimeout(typingDebounce);
+  socket.emit('typing_stop');
+}
+
+// ── Login ──────────────────────────────────────────────────────────
+function doLogin(){
+  const input=document.getElementById('login-name');
+  const name=input.value.trim();
+  if(!name||name.length<2){
+    input.classList.add('error'); input.focus();
+    setTimeout(()=>input.classList.remove('error'),1500);
+    return;
+  }
+  currentUser=name;
+  document.getElementById('my-name-display').textContent=name;
+  document.getElementById('my-initials').textContent=initials(name);
+  const col=colorFor(name);
+  const av=document.getElementById('my-avatar');
+  av.style.background=col.bg; av.style.color=col.text;
+  const overlay=document.getElementById('login-overlay');
+  overlay.style.transition='opacity .25s';
+  overlay.style.opacity='0';
+  setTimeout(()=>{ overlay.style.display='none'; },250);
+  connectSocket();
+  renderRooms();
+  setTimeout(()=>joinRoom('geral','geral','Conversa geral'),400);
+  showToast('Bem-vindo, '+name+'! 👋');
+}
+
+// ── Tema ───────────────────────────────────────────────────────────
+function toggleTheme(){
+  const dark=document.documentElement.getAttribute('data-theme')!=='dark';
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-icon').innerHTML=dark
+    ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    :'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+}
+
+// ── Emoji Picker ───────────────────────────────────────────────────
+const EMOJI_CATS = [
+  { label:'😀 Rostos', emojis:['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😉','😊','🥰','😍','😘','😋','😛','😜','🤪','😎','🤩','😏','😒','😔','😢','😭','😤','😠','😡','🤬','😈','💀','😴','🤔','🤫','🤭','🥺','😷','🤒','🤢','🥵','🥶'] },
+  { label:'👋 Gestos', emojis:['👋','✋','🖐️','🤚','🖖','👌','✌️','🤞','🤟','🤘','👈','👉','👆','👇','👍','👎','✊','👊','👏','🙌','🙏','💪','🤲','👐','🫶','🤜','🤛'] },
+  { label:'❤️ Corações', emojis:['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','💕','💞','💓','💗','💖','💘','💝','💟','🫀'] },
+  { label:'🎉 Celebração', emojis:['🎉','🎊','🎈','🎁','🎀','🏆','🥇','🥈','🥉','🎯','🎮','🕹️','🎲','🧩','🪄','🎭','🎨','🎬','🎤','🎧','🎵','🎶','🎷','🎸','🎹','🎺','🎻','🥁'] },
+  { label:'🐶 Animais', emojis:['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🦆','🦅','🦉','🐺','🐴','🦄','🐝','🐛','🦋','🐢','🐍','🦎','🐙','🐬','🐳','🦈','🐘','🦒','🦓','🐕','🐈','🐇','🐿️'] },
+  { label:'🍕 Comida', emojis:['🍕','🍔','🍟','🌭','🍿','🥓','🥚','🍳','🥞','🧇','🍞','🥐','🧀','🌮','🌯','🍝','🍜','🍣','🍱','🥟','🍙','🍰','🎂','🧁','🍩','🍪','🍫','🍬','🍭','☕','🍵','🧃','🥤','🧋','🍺','🍻','🥂','🍷','🍸','🍹'] },
+  { label:'⚽ Esportes', emojis:['⚽','🏀','🏈','⚾','🎾','🏐','🏉','🎱','🏓','🏸','🥊','🥋','🎽','🛹','⛸️','🎿','🏋️','🏄','🏊','🚴','🧘','🏆','🥇','🎖️','🏅'] },
+  { label:'🚀 Viagem', emojis:['🚀','✈️','🛸','🚁','🚂','🚄','🚇','🚌','🚗','🚕','🏎️','🚲','🛵','🏍️','⛵','🚢','🗺️','🧭','🏔️','🌋','🏖️','🏕️','🏙️','🗼','🗽','🏛️','⛩️','🕌','🕍','🛕'] },
+  { label:'💡 Objetos', emojis:['💡','🔦','🕯️','💻','🖥️','📱','⌨️','🖱️','🖨️','📷','📸','📹','🎥','📞','☎️','📺','📻','🎙️','⏰','⌚','📡','🔋','🔌','💾','💿','📀','🧲','🔭','🔬','💊','🩺','🩹','🔑','🗝️','🔒','🔓','🔨','⚙️','🔧','🔩','🪛','🧰','💰','💳','📦','📬','📝','📖','📚','🗂️','✂️','🖊️','🖋️'] },
+  { label:'🌍 Natureza', emojis:['🌍','🌎','🌏','🌙','☀️','🌤️','⛅','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌈','🌊','💧','🔥','🌿','🍀','🌸','🌺','🌻','🌹','🌵','🌴','🍁','🍂','🍃','🌾','🍄','🐚','🪨','🪵','💐','🌱','🌲','🌳'] },
+  { label:'🇧🇷 Bandeiras', emojis:['🇧🇷','🇺🇸','🇬🇧','🇪🇸','🇵🇹','🇫🇷','🇩🇪','🇮🇹','🇯🇵','🇨🇳','🇷🇺','🇮🇳','🇰🇷','🇦🇺','🇨🇦','🇲🇽','🇦🇷','🇨🇱','🇨🇴','🇵🇪','🇻🇪','🇺🇾','🇧🇴','🇵🇾','🇪🇨','🇳🇱','🇧🇪','🇨🇭','🇸🇪','🇳🇴','🇩🇰','🇫🇮','🇵🇱','🇺🇦','🇹🇷','🇸🇦','🇦🇪','🇮🇱','🇿🇦','🇳🇬','🇪🇬','🇲🇦','🇰🇪','🏳️','🏴','🏁','🚩','🏳️‍🌈','🏳️‍⚧️'] },
+];
+
+let currentCat = 0;
+let pickerOpen = false;
+
+function buildPicker(){
+  const tabs=document.getElementById('emoji-tabs');
+  const grid=document.getElementById('emoji-grid');
+  tabs.innerHTML='';
+  EMOJI_CATS.forEach((cat,i)=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-tab'+(i===0?' active':'');
+    btn.textContent=cat.label.split(' ')[0];
+    btn.title=cat.label;
+    btn.onclick=()=>{ currentCat=i; renderEmojiGrid(); document.querySelectorAll('.emoji-tab').forEach((b,j)=>b.classList.toggle('active',j===i)); };
+    tabs.appendChild(btn);
+  });
+  renderEmojiGrid();
+}
+
+function renderEmojiGrid(){
+  const grid=document.getElementById('emoji-grid');
+  grid.innerHTML='';
+  EMOJI_CATS[currentCat].emojis.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-btn'; btn.textContent=e; btn.title=e;
+    btn.onclick=()=>insertEmoji(e);
+    grid.appendChild(btn);
+  });
+}
+
+function insertEmoji(emoji){
+  const input=document.getElementById('message-input');
+  const start=input.selectionStart;
+  const end=input.selectionEnd;
+  const val=input.value;
+  input.value=val.slice(0,start)+emoji+val.slice(end);
+  input.focus();
+  const pos=start+emoji.length;
+  input.setSelectionRange(pos,pos);
+  input.dispatchEvent(new Event('input'));
+}
+
+function togglePicker(){
+  pickerOpen=!pickerOpen;
+  const p=document.getElementById('emoji-picker');
+  p.classList.toggle('open',pickerOpen);
+  if(pickerOpen && !document.getElementById('emoji-grid').children.length) buildPicker();
+}
+
+document.addEventListener('click',(e)=>{
+  if(pickerOpen && !document.getElementById('emoji-picker').contains(e.target) && e.target.id!=='emoji-toggle-btn' && !document.getElementById('emoji-toggle-btn').contains(e.target)){
+    pickerOpen=false;
+    document.getElementById('emoji-picker').classList.remove('open');
+  }
+});
+
+// ── Event listeners ────────────────────────────────────────────────
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('login-name').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+document.getElementById('send-btn').addEventListener('click', sendMessage);
+document.getElementById('emoji-toggle-btn').addEventListener('click', e=>{ e.stopPropagation(); togglePicker(); });
+
+document.getElementById('message-input').addEventListener('input', function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,120)+'px';
+  document.getElementById('send-btn').disabled=!this.value.trim();
+  const n=this.value.length;
+  document.getElementById('char-count').textContent=n>400?n+'/500':'';
+  if(socket){
+    socket.emit('typing_start');
+    clearTimeout(typingDebounce);
+    typingDebounce=setTimeout(()=>socket.emit('typing_stop'),2000);
+  }
+});
+
+document.getElementById('message-input').addEventListener('keydown', function(e){
+  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); }
+});
+
+document.getElementById('search-input').addEventListener('input', function(){ renderRooms(this.value); });
+
+document.getElementById('logout-btn').addEventListener('click', ()=>{
+  showToast('Até mais! 👋');
+  setTimeout(()=>{
+    if(socket){ socket.disconnect(); socket=null; }
+    currentUser=null; currentRoom=null;
+    clearMessages();
+    document.getElementById('empty-state').style.display='flex';
+    document.getElementById('login-name').value='';
+    const overlay=document.getElementById('login-overlay');
+    overlay.style.opacity='1'; overlay.style.display='flex';
+  },800);
+});
+
+// detecta tema do sistema
+if(window.matchMedia('(prefers-color-scheme:dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+  document.getElementById('theme-icon').innerHTML='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+
+document.getElementById('login-name').focus();
+</script>
+</body>
+</html>
