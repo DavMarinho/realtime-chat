@@ -19,13 +19,13 @@
         <span class="logo-name">Pulse</span>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="theme-toggle" title="Alternar tema" aria-label="Alternar tema">
+        <button class="icon-btn" id="theme-toggle" aria-label="Tema">
           <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="4"/>
             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
           </svg>
         </button>
-        <button class="icon-btn sidebar-close-btn" id="sidebar-close" aria-label="Fechar menu">
+        <button class="icon-btn sidebar-close-btn" id="sidebar-close" aria-label="Fechar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
@@ -45,6 +45,14 @@
     <div class="rooms-label">Salas</div>
     <div class="rooms-list" id="rooms-list"></div>
 
+    <!-- ONLINE USERS -->
+    <div class="rooms-label online-label" id="online-section" style="display:none">Online agora</div>
+    <div class="online-list" id="online-list"></div>
+
+    <!-- DM LIST -->
+    <div class="rooms-label" id="dm-label" style="display:none">Mensagens diretas</div>
+    <div class="rooms-list" id="dm-list"></div>
+
     <div class="sidebar-footer">
       <div class="user-avatar" id="my-avatar" style="background:var(--accent-soft);color:var(--accent-text)">
         <span id="my-initials">?</span>
@@ -54,7 +62,7 @@
         <div class="user-name" id="my-name-display">—</div>
         <div class="user-status">● online</div>
       </div>
-      <button class="icon-btn" id="logout-btn" title="Sair" aria-label="Sair">
+      <button class="icon-btn" id="logout-btn" aria-label="Sair">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
           <polyline points="16,17 21,12 16,7"/>
@@ -64,19 +72,18 @@
     </div>
   </aside>
 
-  <!-- OVERLAY mobile -->
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
   <!-- CHAT -->
   <main class="chat-area">
     <header class="chat-header">
       <div class="chat-header-left">
-        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Abrir menu">
+        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Menu">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
         </button>
-        <div class="chat-room-icon">💬</div>
+        <div class="chat-room-icon" id="chat-room-icon">💬</div>
         <div>
           <div class="chat-room-name" id="chat-room-name">Selecione uma sala</div>
           <div class="chat-room-meta" id="chat-room-meta">—</div>
@@ -98,15 +105,13 @@
           </svg>
         </div>
         <div class="empty-title">Nenhuma sala selecionada</div>
-        <div class="empty-sub">Escolha uma sala na barra lateral para começar</div>
+        <div class="empty-sub">Escolha uma sala para começar</div>
       </div>
       <div class="typing-row" id="typing-row">
         <div class="msg-avatar" id="typing-avatar" style="background:var(--accent-soft);color:var(--accent-text)">?</div>
         <div>
           <div class="typing-bubble">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
+            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
           </div>
           <span class="typing-label" id="typing-label">alguém está digitando</span>
         </div>
@@ -114,27 +119,23 @@
     </div>
 
     <div class="input-area" style="position:relative">
-      <!-- EMOJI PICKER -->
       <div class="emoji-picker" id="emoji-picker">
         <div class="emoji-tabs" id="emoji-tabs"></div>
         <div class="emoji-grid" id="emoji-grid"></div>
       </div>
-
       <div class="input-wrap">
         <button class="icon-btn" id="emoji-toggle-btn" aria-label="Emoji" style="margin-bottom:2px;flex-shrink:0">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-            <line x1="9" y1="9" x2="9.01" y2="9"/>
-            <line x1="15" y1="9" x2="15.01" y2="9"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
           </svg>
         </button>
-        <textarea class="message-input" id="message-input" placeholder="Mensagem…" rows="1" maxlength="500" aria-label="Campo de mensagem" disabled></textarea>
+        <textarea class="message-input" id="message-input" placeholder="Mensagem…" rows="1" maxlength="500" aria-label="Mensagem" disabled></textarea>
         <div class="input-actions">
           <button class="send-btn" id="send-btn" disabled aria-label="Enviar">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
             </svg>
           </button>
         </div>
@@ -149,6 +150,7 @@
 
 <div class="toast-container" id="toast-container"></div>
 
+<!-- LOGIN -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-card">
     <div>
@@ -173,59 +175,44 @@
 let currentUser = null;
 let currentRoom = null;
 let socket      = null;
+let dmRooms     = {}; // { roomId: { with: name } }
 
-// ── Salas ──────────────────────────────────────────────────────────
 const ROOMS = [
-  { id: 'geral',  name: 'geral',  desc: 'Conversa geral'  },
-  { id: 'dev',    name: 'dev',    desc: 'Desenvolvimento' },
-  { id: 'design', name: 'design', desc: 'UI/UX e design'  },
-  { id: 'random', name: 'random', desc: 'Aleatório'       },
+  { id:'geral',  name:'geral',  desc:'Conversa geral'  },
+  { id:'dev',    name:'dev',    desc:'Desenvolvimento' },
+  { id:'design', name:'design', desc:'UI/UX e design'  },
+  { id:'random', name:'random', desc:'Aleatório'       },
 ];
 
-// ── Cores por usuário ──────────────────────────────────────────────
-const CL = [
-  {bg:'#EEEDFE',text:'#3C3489'},{bg:'#E1F5EE',text:'#0F6E56'},
-  {bg:'#FAECE7',text:'#993C1D'},{bg:'#FBEAF0',text:'#993556'},
-  {bg:'#E6F1FB',text:'#185FA5'},{bg:'#EAF3DE',text:'#3B6D11'},
-  {bg:'#FAEEDA',text:'#854F0B'},
-];
-const CD = [
-  {bg:'#26215C',text:'#AFA9EC'},{bg:'#04342C',text:'#5DCAA5'},
-  {bg:'#4A1B0C',text:'#F0997B'},{bg:'#4B1528',text:'#ED93B1'},
-  {bg:'#042C53',text:'#85B7EB'},{bg:'#173404',text:'#97C459'},
-  {bg:'#412402',text:'#EF9F27'},
-];
-
-function colorFor(name) {
-  const i = name.split('').reduce((a,c)=>a+c.charCodeAt(0),0) % CL.length;
-  return isDark() ? CD[i] : CL[i];
-}
+// ── Cores ──────────────────────────────────────────────────────────
+const CL=[{bg:'#EEEDFE',text:'#3C3489'},{bg:'#E1F5EE',text:'#0F6E56'},{bg:'#FAECE7',text:'#993C1D'},{bg:'#FBEAF0',text:'#993556'},{bg:'#E6F1FB',text:'#185FA5'},{bg:'#EAF3DE',text:'#3B6D11'},{bg:'#FAEEDA',text:'#854F0B'}];
+const CD=[{bg:'#26215C',text:'#AFA9EC'},{bg:'#04342C',text:'#5DCAA5'},{bg:'#4A1B0C',text:'#F0997B'},{bg:'#4B1528',text:'#ED93B1'},{bg:'#042C53',text:'#85B7EB'},{bg:'#173404',text:'#97C459'},{bg:'#412402',text:'#EF9F27'}];
+function colorFor(name){ const i=name.split('').reduce((a,c)=>a+c.charCodeAt(0),0)%CL.length; return isDark()?CD[i]:CL[i]; }
 function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark'; }
 function initials(n){ return n.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?'; }
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function timeStr(iso){ const d=iso?new Date(iso):new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
 function dateStr(){ return new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}); }
 
+// ── localStorage ───────────────────────────────────────────────────
+function saveSession(name){ try{ localStorage.setItem('pulse_user', name); }catch(e){} }
+function loadSession(){ try{ return localStorage.getItem('pulse_user'); }catch(e){ return null; } }
+function clearSession(){ try{ localStorage.removeItem('pulse_user'); }catch(e){} }
+
 // ── Toast ──────────────────────────────────────────────────────────
-function showToast(msg) {
+function showToast(msg){
   const c=document.getElementById('toast-container');
-  const t=document.createElement('div');
-  t.className='toast'; t.textContent=msg; c.appendChild(t);
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t);
   requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
-  setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),300);},2800);
+  setTimeout(()=>{ t.classList.add('hide'); setTimeout(()=>t.remove(),300); },2800);
 }
 
 // ── Mensagens ──────────────────────────────────────────────────────
-function scrollToBottom(){
-  const w=document.getElementById('messages-wrap');
-  w.scrollTo({top:w.scrollHeight,behavior:'smooth'});
-}
+function scrollToBottom(){ const w=document.getElementById('messages-wrap'); w.scrollTo({top:w.scrollHeight,behavior:'smooth'}); }
 
 function clearMessages(){
   const wrap=document.getElementById('messages-wrap');
-  Array.from(wrap.children).forEach(el=>{
-    if(el.id!=='typing-row'&&el.id!=='empty-state') el.remove();
-  });
+  Array.from(wrap.children).forEach(el=>{ if(el.id!=='typing-row'&&el.id!=='empty-state') el.remove(); });
 }
 
 function appendMessage({id,user,text,time,own,read}){
@@ -253,10 +240,21 @@ function appendMessage({id,user,text,time,own,read}){
 function appendSystemEvent(text){
   const wrap=document.getElementById('messages-wrap');
   const ti=document.getElementById('typing-row');
-  const el=document.createElement('div');
-  el.className='sys-event';
+  const el=document.createElement('div'); el.className='sys-event';
   el.innerHTML=`<div class="sys-dot"></div><span>${escHtml(text)}</span><div class="sys-dot"></div>`;
   wrap.insertBefore(el,ti);
+}
+
+function loadHistory(messages){
+  clearMessages();
+  const wrap=document.getElementById('messages-wrap');
+  const ti=document.getElementById('typing-row');
+  const div=document.createElement('div'); div.className='date-divider';
+  div.innerHTML=`<span>hoje — ${dateStr()}</span>`;
+  wrap.insertBefore(div,ti);
+  appendSystemEvent('Você entrou');
+  messages.forEach(msg=>appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:true}));
+  scrollToBottom();
 }
 
 function showTyping(name){
@@ -270,91 +268,164 @@ function showTyping(name){
 function hideTyping(){ document.getElementById('typing-row').classList.remove('visible'); }
 function updateOnlineCount(n){ document.getElementById('online-count').textContent=n+' online'; }
 
-// ── Socket ─────────────────────────────────────────────────────────
-function connectSocket(){
-  socket=io();
-
-  socket.on('message_history',(messages)=>{
-    clearMessages();
-    const wrap=document.getElementById('messages-wrap');
-    const ti=document.getElementById('typing-row');
-    const div=document.createElement('div');
-    div.className='date-divider';
-    div.innerHTML=`<span>hoje — ${dateStr()}</span>`;
-    wrap.insertBefore(div,ti);
-    appendSystemEvent('Você entrou na sala');
-    messages.forEach(msg=>appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:true}));
-    scrollToBottom();
-  });
-
-  socket.on('new_message',(msg)=>{
-    appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:msg.user!==currentUser});
-    if(msg.user===currentUser){
-      setTimeout(()=>{ const el=document.querySelector(`[data-id="${msg.id}"] .msg-read`); if(el) el.textContent='✓✓'; },800);
-    }
-    const preview=document.querySelector(`.room-item[data-room="${currentRoom}"] .room-preview`);
-    if(preview) preview.textContent=(msg.user===currentUser?'Você':msg.user)+': '+msg.text;
-  });
-
-  socket.on('user_joined',({user,online})=>{ if(user!==currentUser) appendSystemEvent(user+' entrou na sala'); updateOnlineCount(online); });
-  socket.on('user_left',  ({user,online})=>{ appendSystemEvent(user+' saiu'); updateOnlineCount(online); });
-  socket.on('user_typing',      ({user})=>showTyping(user));
-  socket.on('user_stop_typing', ()      =>hideTyping());
-  socket.on('rate_limit',({message})=>showToast(message));
-  socket.on('disconnect',()=>showToast('Conexão perdida. Reconectando...'));
-  socket.on('connect',()=>{ if(currentRoom&&currentUser){ socket.emit('join_room',{room:currentRoom,user:currentUser}); showToast('Reconectado ✓'); } });
-}
-
-// ── Sidebar mobile ─────────────────────────────────────────────────
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('open');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
-document.getElementById('menu-btn').addEventListener('click', openSidebar);
-document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
-document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
-
-// ── Salas ──────────────────────────────────────────────────────────
-function renderRooms(filter){
-  const list=document.getElementById('rooms-list');
+// ── Online users list ──────────────────────────────────────────────
+function renderOnlineUsers(users){
+  const section=document.getElementById('online-section');
+  const list=document.getElementById('online-list');
+  if(!users||!users.length){ section.style.display='none'; list.innerHTML=''; return; }
+  section.style.display='block';
   list.innerHTML='';
-  const q=(filter||'').toLowerCase();
-  ROOMS.filter(r=>r.name.includes(q)).forEach(r=>{
+  users.forEach(name=>{
+    if(name===currentUser) return; // não mostra você mesmo
+    const col=colorFor(name);
     const el=document.createElement('div');
-    el.className='room-item'; el.dataset.room=r.id;
+    el.className='online-user-item';
+    el.title='Enviar mensagem para '+name;
     el.innerHTML=`
-      <div class="room-icon-wrap"><span class="room-hash">#</span></div>
-      <div class="room-info">
-        <div class="room-name">${r.name}</div>
-        <div class="room-preview">${r.desc}</div>
-      </div>
+      <div class="online-user-av" style="background:${col.bg};color:${col.text}">${initials(name)}</div>
+      <span class="online-user-name">${escHtml(name)}</span>
+      <div class="online-pip" style="margin-left:auto"></div>
     `;
-    el.onclick=()=>{ joinRoom(r.id,r.name,r.desc); closeSidebar(); };
+    el.onclick=()=>{ openDM(name); closeSidebar(); };
     list.appendChild(el);
   });
 }
 
-function joinRoom(id,name,desc){
-  currentRoom=id;
-  document.getElementById('chat-room-name').textContent='#'+name;
+// ── DM ─────────────────────────────────────────────────────────────
+function openDM(targetUser){
+  if(!socket) return;
+  socket.emit('open_dm',{ targetUser });
+}
+
+function addDMTab(roomId, withUser){
+  if(dmRooms[roomId]) return; // já existe
+  dmRooms[roomId]={ with: withUser };
+
+  const label=document.getElementById('dm-label');
+  const list=document.getElementById('dm-list');
+  label.style.display='block';
+
+  const col=colorFor(withUser);
+  const el=document.createElement('div');
+  el.className='room-item'; el.dataset.room=roomId; el.id='dm-tab-'+roomId;
+  el.innerHTML=`
+    <div class="room-icon-wrap dm-av" style="background:${col.bg};color:${col.text};font-size:13px;font-weight:500">${initials(withUser)}</div>
+    <div class="room-info">
+      <div class="room-name">${escHtml(withUser)}</div>
+      <div class="room-preview">Mensagem direta</div>
+    </div>
+    <div class="dm-badge">DM</div>
+  `;
+  el.onclick=()=>{ switchToRoom(roomId,'🔒 '+withUser,'Mensagem direta',true); closeSidebar(); };
+  list.appendChild(el);
+}
+
+function switchToRoom(rid, displayName, desc, isDM){
+  currentRoom=rid;
+  document.getElementById('chat-room-name').textContent=displayName;
   document.getElementById('chat-room-meta').textContent=desc;
+  document.getElementById('chat-room-icon').textContent=isDM?'🔒':'💬';
   document.getElementById('message-input').disabled=false;
   document.getElementById('send-btn').disabled=true;
   document.getElementById('hint-text').textContent='Enter para enviar · Shift+Enter para nova linha';
   document.getElementById('empty-state').style.display='none';
   document.querySelectorAll('.room-item').forEach(el=>el.classList.remove('active'));
-  document.querySelector(`.room-item[data-room="${id}"]`)?.classList.add('active');
-  if(socket) socket.emit('join_room',{room:id,user:currentUser});
+  const el=document.querySelector(`.room-item[data-room="${rid}"]`);
+  if(el) el.classList.add('active');
+}
+
+// ── Socket ─────────────────────────────────────────────────────────
+function connectSocket(){
+  socket=io();
+
+  socket.on('message_history',(messages)=>{ loadHistory(messages); });
+
+  socket.on('new_message',(msg)=>{
+    // só renderiza se for a sala atual
+    if(msg.room===currentRoom){
+      appendMessage({id:msg.id,user:msg.user,text:msg.text,time:timeStr(msg.created_at),own:msg.user===currentUser,read:msg.user!==currentUser});
+      if(msg.user===currentUser) setTimeout(()=>{ const el=document.querySelector(`[data-id="${msg.id}"] .msg-read`); if(el) el.textContent='✓✓'; },800);
+    }
+    // atualiza preview na sidebar
+    const preview=document.querySelector(`.room-item[data-room="${msg.room}"] .room-preview`);
+    if(preview) preview.textContent=(msg.user===currentUser?'Você':msg.user)+': '+msg.text;
+    // badge se não estiver na sala
+    if(msg.room!==currentRoom && msg.user!==currentUser){
+      const tab=document.querySelector(`.room-item[data-room="${msg.room}"]`);
+      if(tab && !tab.querySelector('.room-badge')){
+        const b=document.createElement('div'); b.className='room-badge'; b.textContent='●';
+        tab.appendChild(b);
+      }
+    }
+  });
+
+  socket.on('user_joined',({user,online,users})=>{
+    if(user!==currentUser) appendSystemEvent(user+' entrou');
+    updateOnlineCount(online);
+    renderOnlineUsers(users);
+  });
+
+  socket.on('user_left',({user,online,users})=>{
+    appendSystemEvent(user+' saiu');
+    updateOnlineCount(online);
+    renderOnlineUsers(users);
+  });
+
+  socket.on('user_typing',    ({user})=>showTyping(user));
+  socket.on('user_stop_typing',()    =>hideTyping());
+  socket.on('rate_limit',({message}) =>showToast(message));
+
+  // DM aberto por mim
+  socket.on('dm_opened',({roomId,with:withUser,history})=>{
+    addDMTab(roomId, withUser);
+    socket.emit('join_room',{ room: roomId, user: currentUser });
+    switchToRoom(roomId,'🔒 '+withUser,'Mensagem direta',true);
+    loadHistory(history);
+    closeSidebar();
+  });
+
+  // DM recebido de outro usuário
+  socket.on('dm_received',({roomId,from,history})=>{
+    addDMTab(roomId, from);
+    showToast(from+' te enviou uma mensagem direta');
+    const tab=document.querySelector(`#dm-tab-${roomId} .room-preview`);
+    if(tab) tab.textContent='Nova mensagem';
+  });
+
+  socket.on('disconnect',()=>showToast('Conexão perdida. Reconectando...'));
+  socket.on('connect',()=>{
+    if(currentRoom&&currentUser){
+      socket.emit('join_room',{room:currentRoom,user:currentUser});
+      showToast('Reconectado ✓');
+    }
+  });
+}
+
+// ── Sidebar mobile ─────────────────────────────────────────────────
+function openSidebar(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('open'); }
+function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
+
+// ── Salas ──────────────────────────────────────────────────────────
+function renderRooms(filter){
+  const list=document.getElementById('rooms-list'); list.innerHTML='';
+  const q=(filter||'').toLowerCase();
+  ROOMS.filter(r=>r.name.includes(q)).forEach(r=>{
+    const el=document.createElement('div'); el.className='room-item'; el.dataset.room=r.id;
+    el.innerHTML=`
+      <div class="room-icon-wrap"><span class="room-hash">#</span></div>
+      <div class="room-info"><div class="room-name">${r.name}</div><div class="room-preview">${r.desc}</div></div>
+    `;
+    el.onclick=()=>{
+      switchToRoom(r.id,'#'+r.name,r.desc,false);
+      if(socket) socket.emit('join_room',{room:r.id,user:currentUser});
+      closeSidebar();
+    };
+    list.appendChild(el);
+  });
 }
 
 // ── Enviar mensagem ────────────────────────────────────────────────
 let typingDebounce;
-
 function sendMessage(){
   const input=document.getElementById('message-input');
   const text=input.value.trim();
@@ -368,28 +439,31 @@ function sendMessage(){
 }
 
 // ── Login ──────────────────────────────────────────────────────────
-function doLogin(){
-  const input=document.getElementById('login-name');
-  const name=input.value.trim();
-  if(!name||name.length<2){
-    input.classList.add('error'); input.focus();
-    setTimeout(()=>input.classList.remove('error'),1500);
-    return;
-  }
+function doLogin(name){
   currentUser=name;
+  saveSession(name);
   document.getElementById('my-name-display').textContent=name;
   document.getElementById('my-initials').textContent=initials(name);
   const col=colorFor(name);
   const av=document.getElementById('my-avatar');
   av.style.background=col.bg; av.style.color=col.text;
   const overlay=document.getElementById('login-overlay');
-  overlay.style.transition='opacity .25s';
-  overlay.style.opacity='0';
+  overlay.style.transition='opacity .25s'; overlay.style.opacity='0';
   setTimeout(()=>{ overlay.style.display='none'; },250);
   connectSocket();
   renderRooms();
-  setTimeout(()=>joinRoom('geral','geral','Conversa geral'),400);
+  setTimeout(()=>{
+    switchToRoom('geral','#geral','Conversa geral',false);
+    socket.emit('join_room',{room:'geral',user:currentUser});
+  },400);
   showToast('Bem-vindo, '+name+'! 👋');
+}
+
+function handleLoginClick(){
+  const input=document.getElementById('login-name');
+  const name=input.value.trim();
+  if(!name||name.length<2){ input.classList.add('error'); input.focus(); setTimeout(()=>input.classList.remove('error'),1500); return; }
+  doLogin(name);
 }
 
 // ── Tema ───────────────────────────────────────────────────────────
@@ -402,32 +476,27 @@ function toggleTheme(){
 }
 
 // ── Emoji Picker ───────────────────────────────────────────────────
-const EMOJI_CATS = [
-  { label:'😀 Rostos', emojis:['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😉','😊','🥰','😍','😘','😋','😛','😜','🤪','😎','🤩','😏','😒','😔','😢','😭','😤','😠','😡','🤬','😈','💀','😴','🤔','🤫','🤭','🥺','😷','🤒','🤢','🥵','🥶'] },
-  { label:'👋 Gestos', emojis:['👋','✋','🖐️','🤚','🖖','👌','✌️','🤞','🤟','🤘','👈','👉','👆','👇','👍','👎','✊','👊','👏','🙌','🙏','💪','🤲','👐','🫶','🤜','🤛'] },
-  { label:'❤️ Corações', emojis:['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','💕','💞','💓','💗','💖','💘','💝','💟','🫀'] },
-  { label:'🎉 Celebração', emojis:['🎉','🎊','🎈','🎁','🎀','🏆','🥇','🥈','🥉','🎯','🎮','🕹️','🎲','🧩','🪄','🎭','🎨','🎬','🎤','🎧','🎵','🎶','🎷','🎸','🎹','🎺','🎻','🥁'] },
-  { label:'🐶 Animais', emojis:['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🦆','🦅','🦉','🐺','🐴','🦄','🐝','🐛','🦋','🐢','🐍','🦎','🐙','🐬','🐳','🦈','🐘','🦒','🦓','🐕','🐈','🐇','🐿️'] },
-  { label:'🍕 Comida', emojis:['🍕','🍔','🍟','🌭','🍿','🥓','🥚','🍳','🥞','🧇','🍞','🥐','🧀','🌮','🌯','🍝','🍜','🍣','🍱','🥟','🍙','🍰','🎂','🧁','🍩','🍪','🍫','🍬','🍭','☕','🍵','🧃','🥤','🧋','🍺','🍻','🥂','🍷','🍸','🍹'] },
-  { label:'⚽ Esportes', emojis:['⚽','🏀','🏈','⚾','🎾','🏐','🏉','🎱','🏓','🏸','🥊','🥋','🎽','🛹','⛸️','🎿','🏋️','🏄','🏊','🚴','🧘','🏆','🥇','🎖️','🏅'] },
-  { label:'🚀 Viagem', emojis:['🚀','✈️','🛸','🚁','🚂','🚄','🚇','🚌','🚗','🚕','🏎️','🚲','🛵','🏍️','⛵','🚢','🗺️','🧭','🏔️','🌋','🏖️','🏕️','🏙️','🗼','🗽','🏛️','⛩️','🕌','🕍','🛕'] },
-  { label:'💡 Objetos', emojis:['💡','🔦','🕯️','💻','🖥️','📱','⌨️','🖱️','🖨️','📷','📸','📹','🎥','📞','☎️','📺','📻','🎙️','⏰','⌚','📡','🔋','🔌','💾','💿','📀','🧲','🔭','🔬','💊','🩺','🩹','🔑','🗝️','🔒','🔓','🔨','⚙️','🔧','🔩','🪛','🧰','💰','💳','📦','📬','📝','📖','📚','🗂️','✂️','🖊️','🖋️'] },
-  { label:'🌍 Natureza', emojis:['🌍','🌎','🌏','🌙','☀️','🌤️','⛅','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌈','🌊','💧','🔥','🌿','🍀','🌸','🌺','🌻','🌹','🌵','🌴','🍁','🍂','🍃','🌾','🍄','🐚','🪨','🪵','💐','🌱','🌲','🌳'] },
-  { label:'🇧🇷 Bandeiras', emojis:['🇧🇷','🇺🇸','🇬🇧','🇪🇸','🇵🇹','🇫🇷','🇩🇪','🇮🇹','🇯🇵','🇨🇳','🇷🇺','🇮🇳','🇰🇷','🇦🇺','🇨🇦','🇲🇽','🇦🇷','🇨🇱','🇨🇴','🇵🇪','🇻🇪','🇺🇾','🇧🇴','🇵🇾','🇪🇨','🇳🇱','🇧🇪','🇨🇭','🇸🇪','🇳🇴','🇩🇰','🇫🇮','🇵🇱','🇺🇦','🇹🇷','🇸🇦','🇦🇪','🇮🇱','🇿🇦','🇳🇬','🇪🇬','🇲🇦','🇰🇪','🏳️','🏴','🏁','🚩','🏳️‍🌈','🏳️‍⚧️'] },
+const EMOJI_CATS=[
+  {label:'😀 Rostos',   emojis:['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','😉','😊','🥰','😍','😘','😋','😛','😜','🤪','😎','🤩','😏','😒','😔','😢','😭','😤','😠','😡','🤬','😈','💀','😴','🤔','🤫','🤭','🥺','😷','🤒','🤢','🥵','🥶']},
+  {label:'👋 Gestos',   emojis:['👋','✋','🖐️','🤚','🖖','👌','✌️','🤞','🤟','🤘','👈','👉','👆','👇','👍','👎','✊','👊','👏','🙌','🙏','💪','🤲','👐','🫶','🤜','🤛']},
+  {label:'❤️ Corações', emojis:['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','💕','💞','💓','💗','💖','💘','💝','💟','🫀']},
+  {label:'🎉 Celebração',emojis:['🎉','🎊','🎈','🎁','🎀','🏆','🥇','🥈','🥉','🎯','🎮','🕹️','🎲','🧩','🪄','🎭','🎨','🎬','🎤','🎧','🎵','🎶','🎷','🎸','🎹','🎺','🎻','🥁']},
+  {label:'🐶 Animais',  emojis:['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🦆','🦅','🦉','🐺','🐴','🦄','🐝','🐛','🦋','🐢','🐍','🦎','🐙','🐬','🐳','🦈','🐘','🦒','🦓','🐕','🐈','🐇','🐿️']},
+  {label:'🍕 Comida',   emojis:['🍕','🍔','🍟','🌭','🍿','🥓','🥚','🍳','🥞','🧇','🍞','🥐','🧀','🌮','🌯','🍝','🍜','🍣','🍱','🥟','🍙','🍰','🎂','🧁','🍩','🍪','🍫','🍬','🍭','☕','🍵','🧃','🥤','🧋','🍺','🍻','🥂','🍷','🍸','🍹']},
+  {label:'⚽ Esportes', emojis:['⚽','🏀','🏈','⚾','🎾','🏐','🏉','🎱','🏓','🏸','🥊','🥋','🎽','🛹','⛸️','🎿','🏋️','🏄','🏊','🚴','🧘','🏆','🥇','🎖️','🏅']},
+  {label:'🚀 Viagem',   emojis:['🚀','✈️','🛸','🚁','🚂','🚄','🚇','🚌','🚗','🚕','🏎️','🚲','🛵','🏍️','⛵','🚢','🗺️','🧭','🏔️','🌋','🏖️','🏕️','🏙️','🗼','🗽','🏛️','⛩️','🕌','🕍','🛕']},
+  {label:'💡 Objetos',  emojis:['💡','🔦','💻','🖥️','📱','⌨️','🖱️','📷','📸','📹','🎥','📞','📺','📻','⏰','⌚','🔋','🔌','💾','💿','🧲','🔭','🔬','💊','🔑','🔒','🔓','🔨','⚙️','🔧','💰','💳','📦','📝','📖','📚','✂️','🖊️']},
+  {label:'🌍 Natureza', emojis:['🌍','🌎','🌏','🌙','☀️','🌤️','⛅','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌈','🌊','💧','🔥','🌿','🍀','🌸','🌺','🌻','🌹','🌵','🌴','🍁','🍂','🍃','🌾','🍄','💐','🌱','🌲','🌳']},
+  {label:'🇧🇷 Bandeiras',emojis:['🇧🇷','🇺🇸','🇬🇧','🇪🇸','🇵🇹','🇫🇷','🇩🇪','🇮🇹','🇯🇵','🇨🇳','🇷🇺','🇮🇳','🇰🇷','🇦🇺','🇨🇦','🇲🇽','🇦🇷','🇨🇱','🇨🇴','🇵🇪','🇳🇱','🇧🇪','🇨🇭','🇸🇪','🇳🇴','🇩🇰','🇫🇮','🇵🇱','🇺🇦','🇹🇷','🇸🇦','🇦🇪','🇮🇱','🇿🇦','🇳🇬','🇪🇬','🇲🇦','🇰🇪','🏳️','🏴','🚩','🏳️‍🌈']},
 ];
 
-let currentCat = 0;
-let pickerOpen = false;
+let currentCat=0, pickerOpen=false;
 
 function buildPicker(){
-  const tabs=document.getElementById('emoji-tabs');
-  const grid=document.getElementById('emoji-grid');
-  tabs.innerHTML='';
+  const tabs=document.getElementById('emoji-tabs'); tabs.innerHTML='';
   EMOJI_CATS.forEach((cat,i)=>{
-    const btn=document.createElement('button');
-    btn.className='emoji-tab'+(i===0?' active':'');
-    btn.textContent=cat.label.split(' ')[0];
-    btn.title=cat.label;
+    const btn=document.createElement('button'); btn.className='emoji-tab'+(i===0?' active':'');
+    btn.textContent=cat.label.split(' ')[0]; btn.title=cat.label;
     btn.onclick=()=>{ currentCat=i; renderEmojiGrid(); document.querySelectorAll('.emoji-tab').forEach((b,j)=>b.classList.toggle('active',j===i)); };
     tabs.appendChild(btn);
   });
@@ -435,11 +504,9 @@ function buildPicker(){
 }
 
 function renderEmojiGrid(){
-  const grid=document.getElementById('emoji-grid');
-  grid.innerHTML='';
+  const grid=document.getElementById('emoji-grid'); grid.innerHTML='';
   EMOJI_CATS[currentCat].emojis.forEach(e=>{
-    const btn=document.createElement('button');
-    btn.className='emoji-btn'; btn.textContent=e; btn.title=e;
+    const btn=document.createElement('button'); btn.className='emoji-btn'; btn.textContent=e; btn.title=e;
     btn.onclick=()=>insertEmoji(e);
     grid.appendChild(btn);
   });
@@ -447,48 +514,34 @@ function renderEmojiGrid(){
 
 function insertEmoji(emoji){
   const input=document.getElementById('message-input');
-  const start=input.selectionStart;
-  const end=input.selectionEnd;
-  const val=input.value;
-  input.value=val.slice(0,start)+emoji+val.slice(end);
+  const start=input.selectionStart, end=input.selectionEnd;
+  input.value=input.value.slice(0,start)+emoji+input.value.slice(end);
   input.focus();
-  const pos=start+emoji.length;
-  input.setSelectionRange(pos,pos);
+  input.setSelectionRange(start+emoji.length,start+emoji.length);
   input.dispatchEvent(new Event('input'));
 }
 
 function togglePicker(){
   pickerOpen=!pickerOpen;
-  const p=document.getElementById('emoji-picker');
-  p.classList.toggle('open',pickerOpen);
+  document.getElementById('emoji-picker').classList.toggle('open',pickerOpen);
   if(pickerOpen && !document.getElementById('emoji-grid').children.length) buildPicker();
 }
 
-document.addEventListener('click',(e)=>{
-  if(pickerOpen && !document.getElementById('emoji-picker').contains(e.target) && e.target.id!=='emoji-toggle-btn' && !document.getElementById('emoji-toggle-btn').contains(e.target)){
-    pickerOpen=false;
-    document.getElementById('emoji-picker').classList.remove('open');
-  }
-});
-
 // ── Event listeners ────────────────────────────────────────────────
-document.getElementById('login-btn').addEventListener('click', doLogin);
-document.getElementById('login-name').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('login-btn').addEventListener('click', handleLoginClick);
+document.getElementById('login-name').addEventListener('keydown', e=>{ if(e.key==='Enter') handleLoginClick(); });
 document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 document.getElementById('send-btn').addEventListener('click', sendMessage);
 document.getElementById('emoji-toggle-btn').addEventListener('click', e=>{ e.stopPropagation(); togglePicker(); });
+document.getElementById('menu-btn').addEventListener('click', openSidebar);
+document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
+document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
 
 document.getElementById('message-input').addEventListener('input', function(){
-  this.style.height='auto';
-  this.style.height=Math.min(this.scrollHeight,120)+'px';
+  this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px';
   document.getElementById('send-btn').disabled=!this.value.trim();
-  const n=this.value.length;
-  document.getElementById('char-count').textContent=n>400?n+'/500':'';
-  if(socket){
-    socket.emit('typing_start');
-    clearTimeout(typingDebounce);
-    typingDebounce=setTimeout(()=>socket.emit('typing_stop'),2000);
-  }
+  const n=this.value.length; document.getElementById('char-count').textContent=n>400?n+'/500':'';
+  if(socket){ socket.emit('typing_start'); clearTimeout(typingDebounce); typingDebounce=setTimeout(()=>socket.emit('typing_stop'),2000); }
 });
 
 document.getElementById('message-input').addEventListener('keydown', function(e){
@@ -497,26 +550,45 @@ document.getElementById('message-input').addEventListener('keydown', function(e)
 
 document.getElementById('search-input').addEventListener('input', function(){ renderRooms(this.value); });
 
+document.addEventListener('click', e=>{
+  if(pickerOpen && !document.getElementById('emoji-picker').contains(e.target) && !document.getElementById('emoji-toggle-btn').contains(e.target)){
+    pickerOpen=false; document.getElementById('emoji-picker').classList.remove('open');
+  }
+});
+
 document.getElementById('logout-btn').addEventListener('click', ()=>{
   showToast('Até mais! 👋');
   setTimeout(()=>{
     if(socket){ socket.disconnect(); socket=null; }
-    currentUser=null; currentRoom=null;
+    currentUser=null; currentRoom=null; dmRooms={};
+    clearSession();
     clearMessages();
     document.getElementById('empty-state').style.display='flex';
+    document.getElementById('online-section').style.display='none';
+    document.getElementById('online-list').innerHTML='';
+    document.getElementById('dm-label').style.display='none';
+    document.getElementById('dm-list').innerHTML='';
     document.getElementById('login-name').value='';
     const overlay=document.getElementById('login-overlay');
     overlay.style.opacity='1'; overlay.style.display='flex';
   },800);
 });
 
-// detecta tema do sistema
+// ── Init ───────────────────────────────────────────────────────────
 if(window.matchMedia('(prefers-color-scheme:dark)').matches){
   document.documentElement.setAttribute('data-theme','dark');
   document.getElementById('theme-icon').innerHTML='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
 }
 
-document.getElementById('login-name').focus();
+// auto-login se tiver sessão salva
+const saved=loadSession();
+if(saved){
+  document.getElementById('login-name').value=saved;
+  // pequeno delay pra garantir que o socket.io carregou
+  setTimeout(()=>doLogin(saved), 300);
+} else {
+  document.getElementById('login-name').focus();
+}
 </script>
 </body>
 </html>
