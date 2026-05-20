@@ -178,10 +178,10 @@ let socket      = null;
 let dmRooms     = {}; // { roomId: { with: name } }
 
 const ROOMS = [
-  { id:'geral',  name:'geral',  desc:'Conversa geral'  },
-  { id:'dev',    name:'dev',    desc:'Desenvolvimento' },
-  { id:'design', name:'design', desc:'UI/UX e design'  },
-  { id:'random', name:'random', desc:'Aleatório'       },
+  { id:'geral',  name:'Geral',  desc:'Conversa geral'  },
+  { id:'geral2', name:'Geral 2',desc:'Segunda sala geral'},
+  { id:'work',   name:'Work',   desc:'Trabalho e projetos'},
+  { id:'game',   name:'Game',   desc:'Jogos e entretenimento'},
 ];
 
 // ── Cores ──────────────────────────────────────────────────────────
@@ -406,9 +406,22 @@ function connectSocket(){
   });
 }
 
-// ── Sidebar mobile ─────────────────────────────────────────────────
-function openSidebar(){ document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('open'); }
-function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
+// ── Sidebar toggle ─────────────────────────────────────────────────
+function openSidebar(){
+  document.getElementById('sidebar').classList.remove('collapsed');
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+  document.getElementById('menu-btn').style.display='none';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  // no desktop, colapsa a sidebar
+  if(window.innerWidth > 768){
+    document.getElementById('sidebar').classList.add('collapsed');
+    document.getElementById('menu-btn').style.display='flex';
+  }
+}
 
 // ── Salas ──────────────────────────────────────────────────────────
 function renderRooms(filter){
@@ -421,7 +434,7 @@ function renderRooms(filter){
       <div class="room-info"><div class="room-name">${r.name}</div><div class="room-preview">${r.desc}</div></div>
     `;
     el.onclick=()=>{
-      switchToRoom(r.id,'#'+r.name,r.desc,false);
+      switchToRoom(r.id, r.name, r.desc, false);
       if(socket) socket.emit('join_room',{room:r.id,user:currentUser});
       closeSidebar();
     };
@@ -458,7 +471,7 @@ function doLogin(name){
   connectSocket();
   renderRooms();
   setTimeout(()=>{
-    switchToRoom('geral','#geral','Conversa geral',false);
+    switchToRoom('geral','Geral','Conversa geral',false);
     socket.emit('join_room',{room:'geral',user:currentUser});
   },400);
   showToast('Bem-vindo, '+name+'! 👋');
