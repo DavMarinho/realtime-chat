@@ -48,15 +48,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* ── LAYOUT ── */
 .app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;height:100vh;overflow:hidden}
 
-/* ── SIDEBAR COLLAPSED (desktop) ── */
-.sidebar.collapsed{transform:translateX(-100%);pointer-events:none}
-.app{position:relative}
-.menu-btn{display:none}
-
 /* ── SIDEBAR ── */
-.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:background .25s var(--ease-out),transform .28s var(--ease-out)}
-.sidebar-close-btn{display:flex}
-.menu-btn{display:flex}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:background .25s var(--ease-out)}
+.sidebar-close-btn{display:none}
+.sidebar-overlay{display:none}
 
 .sidebar-header{padding:18px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:8px}
