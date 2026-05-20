@@ -134,6 +134,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`\n🟣 Rodando em http://localhost:${PORT}\n`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n🟣 Rodando em http://0.0.0.0:${PORT}\n`);
 });
