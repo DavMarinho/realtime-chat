@@ -338,6 +338,11 @@ function switchToRoom(rid, displayName, desc, isDM){
 function connectSocket(){
   socket=io();
 
+  socket.on('online_users',({users,online})=>{
+    updateOnlineCount(online);
+    renderOnlineUsers(users);
+  });
+
   socket.on('message_history',(messages)=>{ loadHistory(messages); });
 
   socket.on('new_message',(msg)=>{

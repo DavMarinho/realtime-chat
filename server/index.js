@@ -71,6 +71,7 @@ io.on('connection', (socket) => {
 
     socket.join(rid);
     socket.emit('message_history', getMessages(rid));
+    socket.emit('online_users', { users: rooms.getOnlineUsers(rid), online: rooms.getOnlineCount(rid) });
     io.to(rid).emit('user_joined', { user: name, online: rooms.getOnlineCount(rid), users: rooms.getOnlineUsers(rid) });
     console.log(`[sala] ${name} → #${rid}`);
   });
